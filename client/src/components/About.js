@@ -1,11 +1,65 @@
-import React from "react";
+import React, {useEffect} from "react";
 import me from "../images/subject_me.jpeg";
+import {useNavigate} from 'react-router-dom'
+import axios from 'axios'
 
 export default function About() {
+
+  const navigate = useNavigate()
+  
+  const callAboutPage = async()=>{
+    // e.preventDefault() 
+    try {
+      console.log('Before fetch of callAboutPage')
+      let res = await fetch('/auth/about',{
+        method:"GET",
+        headers:{
+          Accept:"application/json",
+          "Content-Type" : "application/json"
+        },
+        credentials: "include" // these should be written for us to get data from cookies and tokens 
+      })
+      console.log('after fetch of callAboutPage')
+
+      const data = await res.json();
+      
+      console.log(data)
+
+      if(!res.status === 200){
+        const error = new Error(res.error)
+        throw error
+      }
+
+    } catch (error){
+      console.log(error)
+      navigate('/login')
+    }
+
+
+    // try {
+    //   const res = await axios.get('/auth/about')
+    //   const data = await res.json()
+    //   console.log(data);
+    // } catch (error) {
+    //   console.log('Inside callAboutPage func '+error)
+    //   navigate('/login')
+    // } 
+  }
+
+
+  // when we are showing about page we have to make sure that user is authenticated 
+  // so to do that we are using useEffect() method to automatically call the authenticate method
+  useEffect(() => {
+    // ? We can't use async functions inside useEffect, can use promises
+    callAboutPage();
+    //  eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])// [] means page fakt 1 time reload hoil 
+
+
   return (
     <>
       <div className="container emp-profile">
-        <form method="">
+        <form method="GET">
           <div className="col-md-4">
             <div className="profile-img">
               <img src={me} alt="my photo" width="30%" />
@@ -21,10 +75,10 @@ export default function About() {
                   RANKING: <span>1/10</span>
                 </p>
 
-                <ul class="nav nav-tabs" role="tablist">
-                  <li class="nav-item">
+                <ul className="nav nav-tabs" role="tablist">
+                  <li className="nav-item">
                     <a
-                      class="nav-link active"
+                      className="nav-link active"
                       id="home-tab"
                       data-toggle="tab"
                       href="#home"
@@ -33,9 +87,9 @@ export default function About() {
                       About
                     </a>
                   </li>
-                  <li class="nav-item">
+                  <li className="nav-item">
                     <a
-                      class="nav-link"
+                      className="nav-link"
                       id="profile-tab"
                       data-toggle="tab"
                       href="#profile"
@@ -114,26 +168,26 @@ export default function About() {
                   </div>
                   <div className="row">
                     <div className="col-md-6">
-                      <label> College</label>
+                      <label> Email</label>
                     </div>
                     <div className="col-md-6">
-                      <p>Government Polytechnic Nashik</p>
-                    </div>
-                  </div>
-                  <div className="row">
-                    <div className="col-md-6">
-                      <label> Course</label>
-                    </div>
-                    <div className="col-md-6">
-                      <p>Computer Technology</p>
+                      <p>om@gmail.com</p>
                     </div>
                   </div>
                   <div className="row">
                     <div className="col-md-6">
-                      <label> Roll No</label>
+                      <label> Phone</label>
                     </div>
                     <div className="col-md-6">
-                      <p>196139</p>
+                      <p>978651387</p>
+                    </div>
+                  </div>
+                  <div className="row">
+                    <div className="col-md-6">
+                      <label> Profession</label>
+                    </div>
+                    <div className="col-md-6">
+                      <p>Computer Engineer</p>
                     </div>
                   </div>
                 </div>

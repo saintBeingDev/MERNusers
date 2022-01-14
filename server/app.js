@@ -17,12 +17,14 @@ const PORT = process.env.PORT
 // Middleware 
 app.use(cors())
 app.use(bodyParser.json())
+// !Example of middleware
 // const middleware = (req,res,next)=>{
 //     console.log(`Middleware is Triggered`);
 //     next();
 // }
+
 // middleware router
-// app.use('/auth',auth)
+app.use('/auth', auth)
 
 
 

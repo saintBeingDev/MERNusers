@@ -3,10 +3,10 @@ import bcrypt from "bcryptjs"
 import jwt from 'jsonwebtoken'
 const router = express.Router();
 import './../db/conn.js'
-import cors from 'cors'
-import User from './../model/userSchema.js'
+import User from '../model/userSchema.js'
+import authenticate from '../middleware/authenticate.js'
 
-router.get('/',cors(), (req,res)=>{
+router.get('/', (req,res)=>{
     res.send(`Auth Router Triggered`)
 })
 
@@ -69,7 +69,7 @@ router.get('/',cors(), (req,res)=>{
     
 // })
 // Todo: Same router.post but password HASHED
-router.post('/register',cors(), async (req, res)=>{
+router.post('/register', async (req, res)=>{
     
     const { name, email, phone, work, password, cpassword } = req.body;
     if(!name || !email || !phone || !work || !password || !cpassword){
@@ -149,6 +149,7 @@ router.post('/signin', async(req,res)=>{
             return res.status(400).send({error:"Pls fill the data"})
 
         const userWantedToLogin = await User.findOne({email:email})//return promise either response or reject
+        console.log("userWantedToLogin")
         console.log(userWantedToLogin)
 
         // to check that hashed password from db and password send by user are same
@@ -158,6 +159,7 @@ router.post('/signin', async(req,res)=>{
             // create token which is inside userSchema.js
             token =await userWantedToLogin.generateAuthToken();//returns promise
 
+            console.log('This is token details');
             console.log(token);
 
 
@@ -188,5 +190,13 @@ router.post('/signin', async(req,res)=>{
     
 })
 
+// Handling about page route
+// Todo we want to only show about us page to user if he had successfully logged in and had his token generated
+// ? So here function named authenticate is middleware which handles this authentication process, imported from our middleware folder
+
+router.get('/about', authenticate , (req, res)=>{
+    console.log('Hello about');
+    res.send(req.rootUser);
+})
 
 export default router

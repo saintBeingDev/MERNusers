@@ -36,45 +36,37 @@ export default function Signup() {
         console.log(values);
 
         try {
-            const res = await fetch("http://localhost:8080/register", {
-            method:"POST",
-            headers:{
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify({
-                // server vr data send krtana data nehmi string format mdhech pathvav lagel cause it doesnt understand json format
-                name, email, phone, work, password, cpassword
-            })
+                const res = await fetch("/auth/register", {
+                method:"POST",
+                headers:{
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({
+                    // server vr data send krtana data nehmi string format mdhech pathvav lagel cause it doesnt understand json format
+                    name, email, phone, work, password, cpassword
+                })
 
-        })// /register ya route la data pathvaycha ahe
+            })// /register ya route la data pathvaycha ahe
 
-        const data = await res.json();
+            const data = await res.json();
 
-        if(res.status=== 422 || !data){
-            window.alert("Invalid Registration")
-            console.log("invalid registration");
-        }else{
-            window.alert("Registered successfully")
-            console.log("success registered");
+            if(res.status=== 422 || !data){
+                window.alert("Invalid Registration")
+                console.log("invalid registration");
+            }else{
+                window.alert("Registered successfully")
+                console.log("success registered");
 
-            navigate('/login')//register zalyavr login kraych mhnun
-        }
+                navigate('/login')//register zalyavr login kraych mhnun
+            }
+
         } catch (error) {
-            console.log(`error occured `, error);
+            console.log('error occured', error);
         }
         
-
-        // const newUser = {
-        //     name : values.name,
-        //     email : values.email,
-        //     phone : values.phone,
-        //     work : values.work,
-        //     password : values.password,
-        //     cpassword : values.cpassword
-        // }
-
+        // ! This is also working
         // try {
-        //     await axios.post('http://localhost:3001/register', values)
+        //     await axios.post('/auth/register', values)
             
         // } catch (error) {
         //     console.log(error);
@@ -91,7 +83,7 @@ export default function Signup() {
                     <div className="signup-content">
                         <div className="signup-form">
                             <h1 className="form-title">Sign up</h1>
-                            <form method='POST' className="register-form" id='register-form'>
+                            <form onSubmit={PostData} method='POST' className="register-form" id='register-form'>
 
                                 <div className="form-group">
                                      <label htmlFor="name">
@@ -131,7 +123,7 @@ export default function Signup() {
                                 </div>
                                 
                                 <div className="form-button">
-                                    <input type="submit" name='signup' id='signup' className='form-submit btn btn-primary' value="register" onClick={PostData}/>
+                                    <input type="submit" name='signup' id='signup' className='form-submit btn btn-primary' value="register" />
                                 </div>
 
                                 <div className="form-button">
