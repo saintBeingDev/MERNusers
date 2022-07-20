@@ -7,6 +7,7 @@ import Contact from './components/Contact'
 import Login from './components/Login'
 import Signup from './components/Signup'
 import Errorpage from './components/Errorpage'
+import Logout from './components/Logout'
 import "./App.css"
 
 export default function App() {
@@ -21,6 +22,7 @@ export default function App() {
         <Route path="/contact" element={<Contact/>}></Route>
         <Route path="/login" element={<Login/>}></Route>
         <Route path="/signup" element={<Signup/>}></Route>
+        <Route path="/logout" element={<Logout/>}></Route>
 
         <Route path="*" exact={true} element={<Errorpage/>} ></Route>
     </Routes>

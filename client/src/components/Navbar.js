@@ -49,6 +49,11 @@ export default function Navbar() {
                 Registration
               </NavLink>
             </li>
+            <li className="nav-item">
+              <NavLink className="nav-link active" aria-current="page" to="/logout">
+                Log out
+              </NavLink>
+            </li>
           </ul>
         </div>
       </div>

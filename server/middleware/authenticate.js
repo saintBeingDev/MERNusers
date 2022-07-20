@@ -7,7 +7,7 @@ const authenticate = async (req, res, next)=>{
     try {
 
         // ? Getting token 
-        const token = req.cookies.jwtoken //jwtoken is name given to that token when we are creating log in and signup routes
+        const token = await req.cookies.jwtoken //jwtoken is name given to that token when we are creating log in and signup routes
 
         // ? Verifying token
         const verifyToken = jwt.verify(token, process.env.SECRET_KEY)
@@ -15,15 +15,16 @@ const authenticate = async (req, res, next)=>{
 
 
         const rootUser = await User.findOne({_id: verifyToken._id, "tokens.token": token})
-
+        console.log('This is rootuser')
+        console.log(rootUser)
         if(!rootUser) {
             throw new Error('User Not Found')
         }
 
         // ? Now if user is verified so we are getting users details
         req.token = token
-        req.rootUser = rootUser // this rootUser has all the data of that specific user from DB
-        req.userID = rootUser._id
+        req.rootUser = rootUser // (used inside about us page) this rootUser has all the data of that specific user from DB
+        req.userID = rootUser._id // (userd inside contact page)
 
         next();
 

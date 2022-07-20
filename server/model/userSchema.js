@@ -28,6 +28,24 @@ const userSchema = new mongoose.Schema({
         type: String,
         required: true
     },
+    date:{
+        type: Date, 
+        default: Date.now
+    },
+    messages:[{
+        name:{
+            type: String,
+            required: true
+        },
+        email:{
+            type: String,
+            required: true
+        },
+        message:{
+            type: String,
+            required: true
+        },
+    }],
     tokens:[
         {
             token:{
@@ -68,5 +86,17 @@ userSchema.methods.generateAuthToken = async function(){
     }
 }
 
+
+// Storing the messages from contact us page
+userSchema.methods.addMessage = async function(nameValue, email, message){
+    try {
+        this.messages = this.messages.concat({name:nameValue, email, message})
+        //here name: nameValue is just for reference we can write only name as key and value pair has same name
+        await this.save()
+        return this.messages
+    } catch (error) {
+        console.log(error)
+    }
+}
 
 export default mongoose.model('user',userSchema)

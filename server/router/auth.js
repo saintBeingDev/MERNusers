@@ -10,6 +10,7 @@ router.get('/', (req,res)=>{
     res.send(`Auth Router Triggered`)
 })
 
+
 //Todo This route is for registering new users
 // ! using promises
 // router.post('/register', (req, res)=>{
@@ -193,10 +194,47 @@ router.post('/signin', async(req,res)=>{
 // Handling about page route
 // Todo we want to only show about us page to user if he had successfully logged in and had his token generated
 // ? So here function named authenticate is middleware which handles this authentication process, imported from our middleware folder
-
-router.get('/about', authenticate , (req, res)=>{
+router.get('/about', authenticate, (req, res)=>{
     console.log('Hello about');
     res.send(req.rootUser);
+})
+
+// Get user data for contact us and home page
+router.get('/getdata', authenticate, (req,res)=>{
+    console.log('Hello from getdata route')
+    res.send(req.rootUser)
+})
+
+// Contact us page
+router.post('/contact', authenticate, async (req,res)=>{
+    try {
+        //get data send by user from req.body
+        const { name, email, message } = req.body
+
+        if(!name || !email || !message){
+            console.log('Error in contact form')
+            return res.json({error:"Plz fill the contact form"})
+        }
+
+        const userContact = await User.findOne({_id: req.userID}) //_id is from DB & req.userID is getting from authentiate.js i.e we are checking id from database and id from request are same or not
+        // if we get that userContact then add the contact page data to  DB
+        if(userContact){
+            const userMessage = await userContact.addMessage(name,email, message)
+            // here addMessage is func created to store the message from contact page to DB and it is defined under userSchema.js
+
+            await userContact.save()
+            res.status(201).json({message: "user Contact successfully"})
+        }
+
+    } catch (error) {
+        console.log(error)
+    }
+})
+
+router.get('/logout',async (req,res)=>{
+    console.log('Logout page from auth.js')
+    res.clearCookie('jwtoken',{path:'/'}) 
+    res.status(200).send('User logout')
 })
 
 export default router

@@ -39,19 +39,32 @@
     width: 50%;
     height: 100%;
     background-color: rgb(223, 248, 243); 
+    
 }
 
 .home-div{
   position: relative;
-  left: 70%;
+  left: 50%;
   top: 20%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
 }
 
 .home-div>p{
-  position: relative;
-  left: 25%;
-  top: 20%;
   word-spacing:2%;
   font-weight: bold;
   color: rgb(255, 0, 106);
 }
+
+.home-div>h1{
+  word-spacing:2%;
+  font-weight: bold;
+  color: rgb(5, 51, 65);
+}
+.home-div> h2{
+  word-spacing:2%;
+  font-weight: 400;
+  color: rgb(41, 2, 41);
+} 

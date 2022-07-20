@@ -1,49 +1,40 @@
-import React, {useEffect} from "react";
+import React, {useEffect , useState} from "react";
 import me from "../images/subject_me.jpeg";
 import {useNavigate} from 'react-router-dom'
-import axios from 'axios'
 
 export default function About() {
-
   const navigate = useNavigate()
+
+  const [userData, setUserData] = useState({})// seting user data as per DB
   
   const callAboutPage = async()=>{
-    // e.preventDefault() 
     try {
-      console.log('Before fetch of callAboutPage')
-      let res = await fetch('/auth/about',{
-        method:"GET",
-        headers:{
-          Accept:"application/json",
-          "Content-Type" : "application/json"
-        },
-        credentials: "include" // these should be written for us to get data from cookies and tokens 
-      })
+        console.log('Before fetch of callAboutPage')
+        const res = await fetch('/auth/about' , {
+          method:"GET",
+          headers:{
+            Accept:"application/json",
+            "Content-Type" : "application/json",
+          },
+          credentials: "include" // these should be written for us to get data from cookies and tokens 
+        })
+
       console.log('after fetch of callAboutPage')
 
       const data = await res.json();
-      
-      console.log(data)
+      console.log('this is data',data)
+      setUserData(data)// setting that userData from DB to our state
 
-      if(!res.status === 200){
-        const error = new Error(res.error)
-        throw error
-      }
+        if(!res.status === 200){
+          const error = new Error(res.error)
+          throw error
+        }
 
-    } catch (error){
-      console.log(error)
+    } catch (err){
+      console.log(err)
       navigate('/login')
     }
 
-
-    // try {
-    //   const res = await axios.get('/auth/about')
-    //   const data = await res.json()
-    //   console.log(data);
-    // } catch (error) {
-    //   console.log('Inside callAboutPage func '+error)
-    //   navigate('/login')
-    // } 
   }
 
 
@@ -52,7 +43,6 @@ export default function About() {
   useEffect(() => {
     // ? We can't use async functions inside useEffect, can use promises
     callAboutPage();
-    //  eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])// [] means page fakt 1 time reload hoil 
 
 
@@ -69,8 +59,8 @@ export default function About() {
           <div className="col-md-4">
             <div className="col-md-6">
               <div className="profile-head">
-                <h5>Om Nikam</h5>
-                <h6>Web Developer</h6>
+                <h5>{userData.name} </h5>
+                <h6>{userData.work}</h6>
                 <p className="profile-rating mt-3 mb-5">
                   RANKING: <span>1/10</span>
                 </p>
@@ -163,7 +153,7 @@ export default function About() {
                       <label> Name</label>
                     </div>
                     <div className="col-md-6">
-                      <p>Om Nikam</p>
+                      <p> {userData.name} </p>
                     </div>
                   </div>
                   <div className="row">
@@ -171,7 +161,7 @@ export default function About() {
                       <label> Email</label>
                     </div>
                     <div className="col-md-6">
-                      <p>om@gmail.com</p>
+                      <p>{userData.email}</p>
                     </div>
                   </div>
                   <div className="row">
@@ -179,7 +169,7 @@ export default function About() {
                       <label> Phone</label>
                     </div>
                     <div className="col-md-6">
-                      <p>978651387</p>
+                      <p>{userData.phone}</p>
                     </div>
                   </div>
                   <div className="row">
@@ -187,7 +177,7 @@ export default function About() {
                       <label> Profession</label>
                     </div>
                     <div className="col-md-6">
-                      <p>Computer Engineer</p>
+                      <p>{userData.work}</p>
                     </div>
                   </div>
                 </div>

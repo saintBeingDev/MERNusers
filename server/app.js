@@ -4,10 +4,8 @@ import dotenv from 'dotenv'
 const app = express()
 import './db/conn.js'
 import auth from './router/auth.js'
-// This is from that connect frontend to backend video https://www.youtube.com/watch?v=nUbNn0voiBI
 import cors from 'cors'
-import User from './model/userSchema.js' // This is how we import userSchema from model
-
+import cookieParser from 'cookie-parser'
 
 
 dotenv.config({path:'./config.env'}) // Once we specified this path in app.js we don't need to use this in other files, i.e. we can direct access our env vars with process.env
@@ -16,6 +14,7 @@ const PORT = process.env.PORT
 
 // Middleware 
 app.use(cors())
+app.use(cookieParser())
 app.use(bodyParser.json())
 // !Example of middleware
 // const middleware = (req,res,next)=>{
